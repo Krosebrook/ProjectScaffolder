@@ -30,7 +30,9 @@
       "Bash(git push:*)",
       "WebFetch(domain:vercel.com)",
       "Bash(curl:*)",
-      "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" commit -m \"$\\(cat <<''EOF''\nfix: add explicit type annotation to fix TypeScript strict mode error\n\n- Type projects array as ProjectWithCounts[] to satisfy strict mode\n- Fixes implicit ''any'' type error on map callback parameter\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" commit -m \"$\\(cat <<''EOF''\nfix: add explicit type annotation to fix TypeScript strict mode error\n\n- Type projects array as ProjectWithCounts[] to satisfy strict mode\n- Fixes implicit ''any'' type error on map callback parameter\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" push origin master)",
+      "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" commit -m \"$\\(cat <<''EOF''\nfix: run prisma generate before build for Vercel deployment\n\n- Prisma client types must be generated on Vercel before Next.js build\n- Fixes \"Module has no exported member 'Project'\" error\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
