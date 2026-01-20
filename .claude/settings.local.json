@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "WebFetch(domain:app.base44.com)",
+      "Bash(npx create-next-app:*)",
+      "Bash(yes:*)",
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npm audit fix:*)",
+      "Bash(npx prisma init:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)",
+      "Bash(npm run test:*)",
+      "Bash(npm test:*)",
+      "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" status)",
+      "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" remote -v)",
+      "Bash(gh auth:*)",
+      "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" add -A)"
+    ]
+  }
+}

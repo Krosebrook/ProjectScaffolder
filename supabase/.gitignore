@@ -1,0 +1,22 @@
+# Supabase local development
+.branches/
+.temp/
+
+# Secrets
+.env
+.env.local
+*.secret
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build outputs
+.supabase/

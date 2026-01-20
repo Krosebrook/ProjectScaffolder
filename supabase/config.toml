@@ -1,0 +1,163 @@
+# ProjectScaffolder - Supabase Configuration
+# Reference: https://supabase.com/docs/guides/cli/config
+
+[project]
+id = "projectscaffolder"
+name = "ProjectScaffolder"
+
+[api]
+# Port to use for the API URL
+port = 54321
+# Schemas to expose in your API
+schemas = ["public", "graphql_public"]
+# Extra schemas to add to the search_path
+extra_search_path = ["public", "extensions"]
+# Max rows returned from a view, table, or stored procedure
+max_rows = 1000
+
+[api.tls]
+enabled = false
+
+[db]
+# Port to use for the local database URL
+port = 54322
+# Major version of PostgreSQL
+major_version = 15
+# Shadow database port
+shadow_port = 54320
+
+[db.pooler]
+enabled = true
+port = 54329
+pool_mode = "transaction"
+default_pool_size = 20
+max_client_conn = 100
+
+[realtime]
+enabled = true
+# Broadcast messages using the database to publish events
+# Requires table to be created with replica identity full
+# See: https://supabase.com/docs/guides/realtime/broadcast#database
+ip_version = "IPv4"
+
+[studio]
+enabled = true
+port = 54323
+api_url = "http://127.0.0.1"
+
+[inbucket]
+# Inbucket for testing email locally
+enabled = true
+port = 54324
+smtp_port = 54325
+pop3_port = 54326
+
+[storage]
+enabled = true
+# S3 API configuration
+file_size_limit = "50MiB"
+
+[auth]
+enabled = true
+# Site URL for redirects
+site_url = "http://localhost:3000"
+# Additional redirect URLs
+additional_redirect_urls = [
+  "https://*.vercel.app/**",
+  "https://projectscaffolder.com/**"
+]
+# JWT expiry in seconds
+jwt_expiry = 3600
+# Enable refresh token rotation
+enable_refresh_token_rotation = true
+# Refresh token reuse interval in seconds
+refresh_token_reuse_interval = 10
+# Enable manual linking of accounts
+enable_manual_linking = false
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = true
+# Secure email change
+secure_email_change = true
+# Max frequency for sending emails
+max_frequency = "1s"
+
+[auth.email.template.invite]
+subject = "You're invited to ProjectScaffolder"
+content_path = "./templates/invite.html"
+
+[auth.email.template.confirmation]
+subject = "Confirm your email for ProjectScaffolder"
+content_path = "./templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "Reset your ProjectScaffolder password"
+content_path = "./templates/recovery.html"
+
+[auth.email.template.magic_link]
+subject = "Your ProjectScaffolder login link"
+content_path = "./templates/magic_link.html"
+
+[auth.email.template.email_change]
+subject = "Confirm your email change for ProjectScaffolder"
+content_path = "./templates/email_change.html"
+
+[auth.sms]
+enable_signup = false
+enable_confirmations = false
+
+[auth.external.github]
+enabled = true
+client_id = "env(GITHUB_CLIENT_ID)"
+secret = "env(GITHUB_CLIENT_SECRET)"
+redirect_uri = ""
+
+[auth.external.google]
+enabled = true
+client_id = "env(GOOGLE_CLIENT_ID)"
+secret = "env(GOOGLE_CLIENT_SECRET)"
+redirect_uri = ""
+
+[auth.external.azure]
+enabled = false
+client_id = "env(AZURE_CLIENT_ID)"
+secret = "env(AZURE_CLIENT_SECRET)"
+url = "env(AZURE_TENANT_URL)"
+redirect_uri = ""
+
+[auth.hook.mfa_verification_attempt]
+enabled = false
+
+[auth.hook.password_verification_attempt]
+enabled = false
+
+[auth.hook.custom_access_token]
+enabled = false
+
+[analytics]
+enabled = true
+port = 54327
+backend = "postgres"
+
+[edge_runtime]
+enabled = true
+policy = "oneshot"
+inspector_port = 8083
+
+[functions]
+# Number of workers per function (0 = auto)
+workers = 0
+
+[functions.webhook-handler]
+enabled = true
+verify_jwt = true
+
+[functions.audit-cleanup]
+enabled = true
+verify_jwt = true
+
+[experimental]
+# Enable S3 protocol for storage
+s3_protocol = false

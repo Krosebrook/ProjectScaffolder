@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in to ProjectScaffolder</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 40px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .logo h1 {
+      color: #0070f3;
+      font-size: 24px;
+      margin: 0;
+    }
+    h2 {
+      color: #1a1a1a;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    p {
+      margin-bottom: 16px;
+      color: #4a4a4a;
+    }
+    .button {
+      display: inline-block;
+      background-color: #0070f3;
+      color: #ffffff !important;
+      text-decoration: none;
+      padding: 12px 32px;
+      border-radius: 6px;
+      font-weight: 600;
+      margin: 20px 0;
+    }
+    .button:hover {
+      background-color: #0060df;
+    }
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #eaeaea;
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+    }
+    .footer a {
+      color: #0070f3;
+      text-decoration: none;
+    }
+    .code {
+      background-color: #f5f5f5;
+      padding: 12px 20px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 14px;
+      margin: 16px 0;
+      word-break: break-all;
+    }
+    .warning {
+      background-color: #fff8e1;
+      border-left: 4px solid #ffc107;
+      padding: 12px 16px;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <h1>ProjectScaffolder</h1>
+    </div>
+
+    <h2>Sign in to your account</h2>
+
+    <p>Click the button below to sign in to your ProjectScaffolder account:</p>
+
+    <p style="text-align: center;">
+      <a href="{{ .ConfirmationURL }}" class="button">Sign In to ProjectScaffolder</a>
+    </p>
+
+    <p>Or copy and paste this link into your browser:</p>
+
+    <div class="code">{{ .ConfirmationURL }}</div>
+
+    <div class="warning">
+      <strong>Security Notice:</strong> This link will expire in 1 hour and can only be used once. If you didn't request this login link, please ignore this email.
+    </div>
+
+    <div class="footer">
+      <p>
+        This email was sent by <a href="https://projectscaffolder.com">ProjectScaffolder</a>
+      </p>
+      <p>
+        &copy; {{ .CurrentYear }} ProjectScaffolder. All rights reserved.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

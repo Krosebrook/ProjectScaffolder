@@ -1,0 +1,332 @@
+// ProjectScaffolder - Enterprise-grade project scaffolding platform
+// Prisma schema for PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// User & Authentication Models
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  emailVerified DateTime?
+  role          Role      @default(USER)
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  projects      Project[]
+  auditLogs     AuditLog[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([email])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum Role {
+  USER
+  ADMIN
+  ENTERPRISE_ADMIN
+}
+
+// ============================================
+// Project & Code Generation Models
+// ============================================
+
+model Project {
+  id              String        @id @default(cuid())
+  name            String
+  description     String?       @db.Text
+  status          ProjectStatus @default(DRAFT)
+
+  // Project configuration
+  techStack       Json          // Array of technologies
+  prompt          String?       @db.Text
+  generatedFiles  Json?         // File tree structure
+
+  // External integrations
+  githubRepo      String?
+  deploymentUrl   String?
+  vercelProjectId String?
+  netlifyId       String?
+
+  // Encrypted at rest via application layer
+  envVariables    Json?
+
+  // Versioning
+  version         Int           @default(1)
+
+  // Relations
+  ownerId         String
+  owner           User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  deployments     Deployment[]
+  codeGenerations CodeGeneration[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  lastDeployedAt  DateTime?
+
+  @@index([ownerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum ProjectStatus {
+  DRAFT
+  GENERATING
+  GENERATED
+  DEPLOYING
+  DEPLOYED
+  FAILED
+}
+
+model Deployment {
+  id          String           @id @default(cuid())
+  projectId   String
+  project     Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  status      DeploymentStatus @default(PENDING)
+  provider    String           // vercel, netlify, github-pages
+  url         String?
+  logs        Json?
+
+  // Error tracking
+  errorMessage String?         @db.Text
+
+  startedAt   DateTime         @default(now())
+  completedAt DateTime?
+
+  @@index([projectId])
+  @@index([status])
+}
+
+enum DeploymentStatus {
+  PENDING
+  BUILDING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+model CodeGeneration {
+  id          String           @id @default(cuid())
+  projectId   String
+  project     Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  prompt      String           @db.Text
+  model       String           // claude-3, gpt-4, gemini-pro
+  output      Json?            // Generated code/files
+
+  // Usage tracking
+  tokenUsage  Json?            // { input: number, output: number }
+  durationMs  Int?
+
+  status      GenerationStatus @default(PENDING)
+  errorMessage String?         @db.Text
+
+  createdAt   DateTime         @default(now())
+  completedAt DateTime?
+
+  @@index([projectId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+enum GenerationStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+// ============================================
+// Compliance & Audit Models
+// ============================================
+
+model AuditLog {
+  id         String   @id @default(cuid())
+
+  // Actor information
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // Action details
+  action     String   // CREATE, UPDATE, DELETE, READ, LOGIN, etc.
+  resource   String   // User, Project, Deployment, etc.
+  resourceId String?
+
+  // Change tracking
+  oldValue   Json?
+  newValue   Json?
+  details    Json?
+
+  // Request metadata
+  ipAddress  String?
+  userAgent  String?  @db.Text
+  requestId  String?  // For request correlation
+
+  // Compliance fields
+  severity   AuditSeverity @default(INFO)
+  category   String?       // authentication, data_access, system, etc.
+
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([resource])
+  @@index([createdAt])
+  @@index([severity])
+}
+
+enum AuditSeverity {
+  DEBUG
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}
+
+// ============================================
+// API Keys & Integration Models
+// ============================================
+
+model ApiKey {
+  id          String   @id @default(cuid())
+  name        String
+  keyHash     String   @unique // Hashed API key
+  keyPrefix   String   // First 8 chars for identification
+
+  userId      String
+
+  // Permissions & scopes
+  scopes      String[] // read:projects, write:projects, deploy, etc.
+
+  // Usage tracking
+  lastUsedAt  DateTime?
+  usageCount  Int      @default(0)
+
+  // Expiration
+  expiresAt   DateTime?
+  revokedAt   DateTime?
+
+  createdAt   DateTime @default(now())
+
+  @@index([keyHash])
+  @@index([userId])
+}
+
+// ============================================
+// GDPR Compliance Models
+// ============================================
+
+model DataSubjectRequest {
+  id          String   @id @default(cuid())
+
+  // Request details
+  email       String
+  requestType DSRType
+  status      DSRStatus @default(PENDING)
+
+  // Processing info
+  processedBy String?
+  processedAt DateTime?
+  notes       String?  @db.Text
+
+  // Verification
+  verificationToken String?  @unique
+  verifiedAt       DateTime?
+
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+
+  @@index([email])
+  @@index([status])
+}
+
+enum DSRType {
+  ACCESS       // Right to access
+  DELETION     // Right to be forgotten
+  RECTIFICATION // Right to correction
+  PORTABILITY  // Right to data portability
+  OBJECTION    // Right to object
+}
+
+enum DSRStatus {
+  PENDING
+  VERIFIED
+  PROCESSING
+  COMPLETED
+  REJECTED
+}
+
+model ConsentRecord {
+  id          String   @id @default(cuid())
+
+  userId      String?
+  email       String
+
+  // Consent details
+  purpose     String   // marketing, analytics, essential, etc.
+  granted     Boolean
+  method      String   // checkbox, banner, api, etc.
+
+  // Tracking
+  ipAddress   String?
+  userAgent   String?  @db.Text
+
+  createdAt   DateTime @default(now())
+  revokedAt   DateTime?
+
+  @@index([email])
+  @@index([purpose])
+  @@index([createdAt])
+}
