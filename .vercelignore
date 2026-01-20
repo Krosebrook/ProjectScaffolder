@@ -1,0 +1,37 @@
+# Local development files
+.claude/
+*.local.*
+.env*
+!.env.example
+
+# Supabase (Edge Functions use Deno - incompatible with Vercel)
+supabase/
+
+# Testing
+tests/
+__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+coverage/
+vitest.config.ts
+
+# Development
+.git/
+.github/
+node_modules/
+.next/
+*.log
+*.tsbuildinfo
+
+# Documentation (optional - keep for now)
+# docs/
+# *.md
+
+# IDE
+.vscode/
+.idea/
+
+# Prisma generated (will be generated during build)
+src/generated/
