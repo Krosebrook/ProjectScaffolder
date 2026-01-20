@@ -6,6 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Plus, FolderOpen, Rocket, Layers } from "lucide-react";
+import type { Project } from "@prisma/client";
+
+type ProjectWithCounts = Project & {
+  _count: {
+    deployments: number;
+    codeGenerations: number;
+  };
+};
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -15,7 +23,7 @@ export default async function DashboardPage() {
   }
 
   // Get user's projects
-  const projects = await db.project.findMany({
+  const projects: ProjectWithCounts[] = await db.project.findMany({
     where: { ownerId: session.user.id },
     orderBy: { updatedAt: "desc" },
     take: 6,

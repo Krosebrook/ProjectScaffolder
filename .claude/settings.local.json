@@ -19,7 +19,18 @@
       "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" status)",
       "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" remote -v)",
       "Bash(gh auth:*)",
-      "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" add -A)"
+      "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" add -A)",
+      "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" commit -m \"$\\(cat <<''EOF''\nfeat: Complete ProjectScaffolder migration from Base44\n\n## Features\n- Next.js 14 App Router with TypeScript\n- Multi-provider LLM abstraction \\(Anthropic, OpenAI, Gemini\\)\n- Supabase database with RLS, vector search \\(pgvector\\)\n- NextAuth.js authentication with OAuth \\(GitHub, Google\\)\n- GDPR compliance \\(consent tracking, DSR handling\\)\n- Comprehensive audit logging\n- API routes for projects, generation, deployment\n\n## Testing\n- Vitest with 104 passing tests\n- Unit tests for AI providers, auth, compliance\n\n## Documentation\n- Architecture documentation with ADRs\n- Supabase setup guide\n- CI/CD pipeline with GitHub Actions\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(gh repo create:*)",
+      "Bash(vercel --version:*)",
+      "Bash(vercel whoami:*)",
+      "Bash(vercel --yes)",
+      "Bash(vercel:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:vercel.com)",
+      "Bash(curl:*)",
+      "Bash(git -C \"C:\\\\Users\\\\kyler\\\\ProjectScaffolder\" commit -m \"$\\(cat <<''EOF''\nfix: add explicit type annotation to fix TypeScript strict mode error\n\n- Type projects array as ProjectWithCounts[] to satisfy strict mode\n- Fixes implicit ''any'' type error on map callback parameter\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
     ]
   }
 }
